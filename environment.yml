@@ -1,0 +1,22 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - airr
+  - biopython
+  - docopt
+  - ete3
+  - fuzzywuzzy 
+  - pandas
+  - perl-bioperl
+  - perl-statistics-basic
+  - perl-list-util
+  - perl-math-combinatorics
+  - pyqt=4
+  - r-docopt
+  - r-ggplot2
+  - r-mass
+  - r-gridbase # is this the right grid?
+  # also, needed to run fastq-dump in the vignette
+  - sra-tools
