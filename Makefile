@@ -1,6 +1,11 @@
 # Run in sonar environment with sonar script on path
 
 INPUT = SRR2126754.fastq
+# TODO Split into separate working directories for each
+TIMEPOINT_34 = SRR2126754
+TIMEPOINT_48 = SRR1057705
+TIMEPOINT_59 = SRR1057707
+REFERENCE = SONAR/sample_data/CAP256-VRC26.01-12H.fa
 THREADS = 8
 WD := $(shell echo "$$(basename $$(pwd))")
 
@@ -54,21 +59,44 @@ m_1: $(M_1_4)
 ### Module 2: Lineage Determination
 
 # 2.1: Identity Divergence
-# sonar id-div -a CAP256-VRC26.01-12H.fa -t 8
+# Here we compare with known antibodies of interest (in this case in this
+# sample FASTA file)
+M_2_1 = output/tables/$(WD)_goodVJ_unique_coverage.tab
+m_2_1: $(M_2_1)
+$(M_2_1): $(M_1_4)
+	sonar id-div -a $(REFERENCE) -t $(THREADS)
+	find work > work_m_2_1.txt
+	find output > output_m_2_1.txt
 
-# 2.2: Island?
-# sonar get_island output/tables/cap256-week34H_goodVJ_unique_id-div.tab --mab CAP256-VRC26.01 --mab CAP256-VRC26.08
+# 2.2: Selection of island for lineage of interest
+# Interactive plot; requires X11.
+# sonar get_island output/tables/$(WD)_goodVJ_unique_id-div.tab --mab CAP256-VRC26.01 --mab CAP256-VRC26.08
 
 # 2.3: Intradonor Analysis
-# sonar intradonor --n CAP256-VRC26.01-12H.fa --v IGHV3-30*18 --threads 8 -f
+# Iterative method to find sequences related to given antibodies.
+M_2_3 = work/lineage/NJ00001.aln
+m_2_3: $(M_2_3)
+$(M_2_3): $(M_1_4)
+	sonar intradonor --n $(REFERENCE) --v IGHV3-30*18 --threads $(THREADS)
+	find work > work_m_2_3.txt
+	find output > output_m_2_3.txt
 
 # 2.4: Cluster into Groups
-# sonar groups -v 'IGHV3-30*18' -j 'IGHJ3*01' -t 8
+# Group sequences in pseudo-lineages by CDR3
+M_2_4 = output/tables/$(WD)_lineages.txt
+m_2_4: $(M_2_4)
+$(M_2_4): $(M_1_4)
+	sonar groups -v 'IGHV3-30*18' -j 'IGHJ3*01' -t $(THREADS)
+	find work > work_m_2_4.txt
+	find output > output_m_2_4.txt
 
 ### Module 3: Phylogenetic Analysis
 
 # 3.1: Merge Timepoints
 # sonar getfasta -l output/tables/islandSeqs.txt -f output/sequences/nucleotide/cap256-week34H_goodVJ_unique.fa -o output/sequences/nucleotide/cap256-week34H_islandSeqs.fa
+# sonar merge_time --seqs ../cap256-week34H/output/sequences/nucleotide/cap256-week34H_islandSeqs.fa --labels w34 \
+#   --seqs ../cap256-week48H/output/sequences/nucleotide/cap256-week48H_islandSeqs.fa\
+#    --labels w48 --seqs ../cap256-week59H/output/sequences/nucleotide/cap256-week59H_islandSeqs.fa --labels w59
 
 # 3.2: Build ML Tree
 # sonar igphyml -i output/sequences/nucleotide/cap256-longitudinal-collected_aligned.fa -f
