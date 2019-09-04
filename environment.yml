@@ -4,7 +4,13 @@ channels:
   - defaults
 dependencies:
   - airr
-  - biopython
+  # Biopython 1.73 specifically is needed for compatibility with how
+  # Bio.Blast.Applications.NcbiblastnCommandline is called in
+  # SONAR/annotate/__init__.py
+  # For more information see:
+  # https://github.com/biopython/biopython/issues/2055
+  # https://github.com/biopython/biopython/pull/2071
+  - biopython=1.73
   - docopt
   - ete3
   - fuzzywuzzy 
@@ -18,5 +24,5 @@ dependencies:
   - r-ggplot2
   - r-mass
   - r-gridbase # is this the right grid?
-  # also, needed to run fastq-dump in the vignette
+  # sra-tools is needed to run fastq-dump in the vignette
   - sra-tools
