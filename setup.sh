@@ -9,8 +9,13 @@ source "$CONDA_PREFIX/etc/profile.d/conda.sh"
 conda activate "$SONAR_ENV"
 # Adding more as per https://github.com/scharch/SONAR/blob/master/Dockerfile
 R --vanilla -e 'install.packages("ptinpoly", repos="http://cran.cnr.berkeley.edu/")'
-cd SONAR && yes N | ./setup.py
-cd SONAR && ln -s $(pwd -P)/sonar $CONDA_PREFIX/bin
+
+git submodule init
+git submodule update
+pushd SONAR
+yes N | ./setup.py
+ln -s $(pwd -P)/sonar $CONDA_PREFIX/bin
+popd
 
 # Goofy install of Perl's PDL::LinearAlgebra to work with LAPACK 3.6.0+
 # https://github.com/PDLPorters/pdl-linearalgebra/issues/3
@@ -21,4 +26,5 @@ tar xzf PDL-LinearAlgebra-0.12.tar.gz
 find PDL-LinearAlgebra-0.12  -type f -name '*.pd' -exec sed -i -r 's/(.ggsvd)_/\13_/g' {} \;
 tar czf PDL-LinearAlgebra-0.12-mod.tar.gz PDL-LinearAlgebra-0.12
 cpanm PDL-LinearAlgebra-0.12-mod.tar.gz --build-args="OTHERLDFLAGS=-llapack"
+rm -rf PDL-LinearAlgebra-0.12/
 rm -f PDL-LinearAlgebra-0.12{,-mod}.tar.gz 

@@ -2,6 +2,7 @@ channels:
   - conda-forge
   - bioconda
   - defaults
+  - eumetsat # needed for a few perl packages
 dependencies:
   - airr
   # Biopython 1.73 specifically is needed for compatibility with how
@@ -14,11 +15,23 @@ dependencies:
   - docopt
   - ete3
   - fuzzywuzzy 
+  - gcc_linux-64
+  - lapack
   - pandas
   - perl-bioperl
-  - perl-statistics-basic
+  - perl-file-copy-recursive
+  - perl-file-map
+  - perl-file-sharedir
+  - perl-io-layers
+  - perl-inline-c
   - perl-list-util
   - perl-math-combinatorics
+  - perl-module-build
+  - perl-path-tiny
+  - perl-pegex
+  - perl-statistics-basic
+  - perl-test-file
+  - perl-yaml
   - pyqt=4
   - r-docopt
   - r-ggplot2
