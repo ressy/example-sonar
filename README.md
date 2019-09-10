@@ -12,7 +12,12 @@ And then:
     conda activate sonar
     make
 
-This runs my own version of what `SONAR/sample_data/runVignette.sh` does.
+This runs my own version of what `SONAR/sample_data/runVignette.sh` does, based
+on a Makefile and with slightly different directory organization.
+
+Or, using the existing runVignette.sh script:
+
+    make vignette_results
 
 ## Outline
 

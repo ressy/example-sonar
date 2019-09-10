@@ -1,5 +1,7 @@
 # Run in sonar environment with sonar script on path
 
+SHELL = /bin/bash
+
 TIMEPOINTS = WK34 WK48 WK59
 THREADS = 8
 WD := $(shell echo "$$(basename $$(pwd))")
@@ -9,7 +11,7 @@ ANALYSES = \
 	analysis-WK48/output/sequences/nucleotide/analysis-WK48_islandSeqs.fa \
 	analysis-WK59/output/sequences/nucleotide/analysis-WK59_islandSeqs.fa
 
-ALL = analysis-longitudinal/output/sequences/nucleotide/analysis-longitudinal-collected.fa
+ALL = analysis-longitudinal/m_3_2
 all: $(ALL)
 
 ### Modules 1 and 2: Annotation and Lineage Determination
@@ -28,7 +30,15 @@ analysis-longitudinal/output/sequences/nucleotide/analysis-longitudinal-collecte
 
 # 3.2: Build ML Tree
 analysis-longitudinal/m_3_2: analysis-longitudinal/output/sequences/nucleotide/analysis-longitudinal-collected.fa
-	cd $(firstword $(subst /, ,$@)) && sonar igphyml -v 'IGHV3-30*18' --quick -f
+	cd $(firstword $(subst /, ,$@)) && sonar igphyml -v 'IGHV3-30*18' --quick -f |& tee m_3_2.log
 
 # The vignette ends there, but there are a few other longitudinal analyses in
 # Module 3, and "Module 4: Figures and Output" beyond that.
+
+### extras
+
+runVignette_local.sh: SONAR/sample_data/runVignette.sh
+	sed 's: /SONAR: ../SONAR:g' $^ > $@
+
+vignette_results: runVignette_local.sh
+	bash $^ |& tee $@.log
