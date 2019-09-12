@@ -1,3 +1,6 @@
+# This isn't quite working.  I  get failures related to the perl packages.  But
+# somehow I did build a working environment, so I saved the full package
+# details to build.txt.
 channels:
   - conda-forge
   - bioconda

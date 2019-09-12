@@ -4,7 +4,10 @@ set -e
 
 SONAR_ENV=${1:-sonar}
 
-conda env update --name "$SONAR_ENV" --file environment.yml
+# Ideally we'd use environment.yml and let the dependencies get figured out,
+# but something's not quite right with my list of pcakages there.  This exact
+# list does work, though.
+conda create --name "$SONAR_ENV" --file build.txt
 source "$CONDA_PREFIX/etc/profile.d/conda.sh"
 conda activate "$SONAR_ENV"
 # Adding more as per https://github.com/scharch/SONAR/blob/master/Dockerfile
