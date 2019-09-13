@@ -1,1 +1,4 @@
 analysis-*/
+cap256-*/
+runVignette_local.sh
+vignette_results.log
