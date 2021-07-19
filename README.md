@@ -1,15 +1,16 @@
 # SONAR Example
 
-Following along with the [paper] and [vignette] for [SONAR].
+Following along with the [paper] and [vignette] for [SONAR], and using conda
+instead of Docker.
 
 First, a very rough setup script to automate a few setup steps.  This creates a
-sonar conda environment.
+example-sonar conda environment.
 
     bash setup.sh
 
 And then:
 
-    conda activate sonar
+    conda activate example-sonar
     make
 
 This runs my own version of what `SONAR/sample_data/runVignette.sh` does, based

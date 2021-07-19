@@ -1,6 +1,5 @@
-# This isn't quite working.  I  get failures related to the perl packages.  But
-# somehow I did build a working environment, so I saved the full package
-# details to build.txt.
+# This contains most but not all dependencies.  See setup.sh for the rest.
+name: example-sonar
 channels:
   - conda-forge
   - bioconda
@@ -35,7 +34,7 @@ dependencies:
   - perl-statistics-basic
   - perl-test-file
   - perl-yaml
-  - pyqt=4
+  - r>=3.6,<4
   - r-docopt
   - r-ggplot2
   - r-mass
