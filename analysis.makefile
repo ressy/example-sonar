@@ -97,10 +97,13 @@ $(M_2_4): $(M_1_4)
 	find output > output_m_2_4.txt
 
 # 3.1: Get FASTA in preparation for longitudinal analysis
+# In the older SONAR described by the vignette, "sonar getfasta" is specific
+# enough, but there are more scripts now so we need to be more specific for the
+# automatic name matching to work.
 M_3_1 = output/sequences/nucleotide/$(WD)_islandSeqs.fa
 m_3_1: $(M_3_1)
 $(M_3_1): $(M_2_2) $(M_1_4)
-	sonar getfasta -l $(word 1,$^) -f $(word 2,$^) -o $@
+	sonar getfastafromlist -l $(word 1,$^) -f $(word 2,$^) -o $@
 
 clean:
 	rm -f derepAllRawSeqs.uc
